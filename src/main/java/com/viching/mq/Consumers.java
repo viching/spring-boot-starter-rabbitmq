@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,6 +21,9 @@ import org.springframework.stereotype.Service;
 public class Consumers {    
     
     private static final Logger logger = LoggerFactory.getLogger(Consumers.class);
+    
+    @Autowired
+    private ConsumersCallback callback;
 
     @RabbitListener(
     // 1.rabbitAdmin:RabbitAdmin名称
@@ -32,7 +36,9 @@ public class Consumers {
     // 绑定的路由名称(xxxx.to(exchange).with("user.exchange")))
     key = Constant.ROUTINGKEY))
     public void operate(Object message) {
-        logger.info("operate message !");
-        logger.info(message.toString());
+        if(callback == null){
+            logger.info("there is no message callback, please implements "+ ConsumersCallback.class.getName());
+        }
+        callback.operateMessage(message);
     }
 }
