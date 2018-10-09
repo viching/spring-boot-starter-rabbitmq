@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.wisely.spring_
+com.viching.mq.RabbitMQAutoConfigration
